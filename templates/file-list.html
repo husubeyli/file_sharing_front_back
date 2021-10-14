@@ -32,7 +32,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@2.2.0/build/jwt-decode.min.js"></script>
 
     <script>
-        let frontPath = 'http://127.0.0.1:5500/'
+        let frontPath = 'http://127.0.0.1:5500'
         let backPath = `http://127.0.0.1:8000`
         if (localStorage.getItem('access') == null) {
             window.location.href = `${frontPath}/templates/login.html`
@@ -53,9 +53,6 @@
         function renderDOM(data) {
             const { user_id } = jwt_decode(localStorage.getItem('access'))
             data.map((item) => {
-                listUl.innerHTML += `<li class="list-group-item"> <a href="${backPath}/files/comment/${item.id}/?q=${user_id}">${item.title}</a></li>`
-            })
-            data[0].file_access[0].files.map((item) => {
                 listUl.innerHTML += `<li class="list-group-item"> <a href="${backPath}/files/comment/${item.id}/?q=${user_id}">${item.title}</a></li>`
             })
         }

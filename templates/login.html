@@ -40,7 +40,7 @@
 
     <script>
         const currentUser = isAuthenticated()
-        let frontPath = 'http://127.0.0.1:5500/'
+        let frontPath = 'http://127.0.0.1:5500'
         let backPath = `http://127.0.0.1:8000`
         if (currentUser) {
             window.location.href = `${frontPath}/templates/file-list.html`
