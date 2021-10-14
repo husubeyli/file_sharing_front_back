@@ -1,0 +1,79 @@
+{{ file.title }}
+<hr>
+{{ file.description }}
+<hr>
+{% if comments %}
+<h3>Comments:</h3>
+
+<ul id="comments">
+    {% for comment in comments %}
+    <li>{{ comment.content|safe }} -- {{ comment.users }}</li><hr>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if check_access_for_wite_smth %}
+    <br>
+<h3>Add Comment</h3>
+
+<form id="CommentForm" method="POST">
+    {% csrf_token %}
+    <!-- <input type="hidden" id="author" name="author" value="1"> -->
+    <input type="hidden" id="file_id" name="file_id" value="{{ file.id }}">
+    <input type="text" id="comment_text" name="comment_text">
+    <button type="submit" id="formSubmit">Add</button>
+</form>
+{% endif %}
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+
+    
+    var searchPath = window.location.search.split('=')
+    var user_idd = parseInt(searchPath[searchPath.length-1])
+
+    var loc = window.location
+    var wsStart = 'ws://'
+    if (loc.protocol == 'https:') {
+        wsStart = 'wss://'
+    }
+    var endpoint = wsStart + loc.host + loc.pathname
+
+    var socket = new WebSocket(endpoint)
+
+    socket.onmessage = function (e){
+
+        var receiveData = JSON.parse(e.data)
+        $('#comments').append("<li>" + receiveData.comment_text + ' -- ' + receiveData.username + '</li><hr>')
+    }
+
+
+    socket.onopen = function (e){
+        $('#CommentForm').submit(function (e){
+            e.preventDefault()
+            var formData = $(this).serialize()
+            var msg = $('#comment_text').val()
+            var user_id = user_idd
+            var file_id = $('#file_id').val()
+            var data = {
+                'comment_text':msg,
+                'author':user_id,
+                'file_id':file_id
+            }
+            socket.send(JSON.stringify(data))
+            $(this)[0].reset()
+
+        })
+    }
+
+
+    socket.onerror = function (e){
+        console.log('error', e)
+    }
+
+
+    socket.onclose = function (e){
+        console.log('close', e)
+    }
+</script>

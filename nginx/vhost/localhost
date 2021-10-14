@@ -1,0 +1,7 @@
+location /static/ {
+    alias /file_sharing/static/;
+}
+
+location /media/ {
+    alias /file_sharing/media/;
+}

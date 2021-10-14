@@ -1,0 +1,90 @@
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'files' %}">Geri dön</a></li>
+    </ol>
+</nav>
+<hr>
+<h4 class="text-center">{{ file.title }}</h4>
+<small>Paylaşma tarixi: {{ file.created_at|date:"Y-m-d H:i" }}</small>
+<br><br>
+<p>{{ file.description|safe }}</p>
+<hr>
+<p><strong>Rəy</strong></p>
+<br>
+<div class="row" id="comments-list">
+    {% for comment in file.comments.all %}
+    <div class="col-md-12 mt-3 mb-3">
+        <p><strong>{{ comment.user.username }}</strong> </p>
+        <p>{{ comment.text }}</p>
+    </div>
+    {% endfor %}
+</div>
+<hr>
+<form action="" id='comment-form'  method="POST">
+    {% csrf_token %}
+
+     
+    <div class="form-group m-0">
+        <textarea name="text" cols="40" rows="3" class="comment-input"
+            placeholder="Please type your answer" required=""></textarea>
+    </div>
+    <br>
+    <button class="btn btn-primary" type="submit"> Comment</button>
+</form>
+{% endblock content %}
+{% block js %}
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
+<script>
+        var wsStart = 'ws://';
+        var loc = window.location;
+        if (loc.protocol == 'https:') {
+            wsStart = 'wss://'
+        }
+
+        var socket_url = wsStart + window.location.host + loc.pathname;
+        var socket = new ReconnectingWebSocket(socket_url);
+        var socket = new WebSocket(socket_url);
+        socket.onmessage = function (event) {
+
+            var newComment = JSON.parse(event.data);
+            // Receive consumer data
+            var comment_text = newComment['comment_text'];
+            var full_name = newComment['author_fullname'];
+            var user_url = newComment['author_url'];
+            var user_profession = newComment['author_profession'];
+            var comment_id = newComment['comment_id'];
+
+            
+            var conversation_comment_section = $('#conversation-comment-section');
+
+
+        };
+
+        socket.onopen = function (event) {
+            // console.log('Comment socket on open ', event);
+            var form = document.getElementById('#comment-form');
+            form.submit(function (e) {
+                e.preventDefault();
+                var comment_text = $(this).find('.comment-input').val();
+                data = {
+                    'user':'husubeyli',
+                    'text': comment_text,
+                };
+                
+                // Send data to consumer
+                socket.send(JSON.stringify(data));
+                $(this)[0].reset();
+            });
+
+        };
+
+        socket.onclose = function (event) {
+            // console.log('Comment socket closed', event)
+        };
+
+
+//#endregion Like Comment Websocket
+</script>
+  
+
