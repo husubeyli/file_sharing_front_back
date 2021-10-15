@@ -1,23 +1,23 @@
-class AuthRouter:
-    router_app_labels = {'auth', 'contenttypes', 'session', 'admin'}
-
+class CheckerRouter:
     def db_for_read(self, model, **hints):
-        if model._meta.app_label in self.router_app_labels:
+        if model._meta.app_label == 'accounts':
             return 'users_db'
-        return None
+        return 'default'
 
     def db_for_write(self, model, **hints):
-        if model._meta.app_label in self.router_app_labels:
+        if model._meta.app_label == 'accounts':
             return 'users_db'
-        return None
+        return 'default'
 
     def allow_realtion(self, obj1, obj2, **hint):
-        if(obj1._meta.app_label in self.router_app_labels or obj2._meta.app_label in self.router_app_labels):
+        if(obj1._meta.app_label =='accounts' or obj2._meta.app_label == 'accounts'):
             return True
-        return None
+        elif 'accounts' not in [obj1._meta.app_label, obj2._meta.app_label]:
+            return True
+        return False
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
-        if app_label in self.route_app_labels:
+        if app_label == 'accounts':
             return db == 'users_db'
         return None
 

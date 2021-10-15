@@ -12,7 +12,9 @@ class CommentViewsets(ModelViewSet):
     queryset = Comment.objects.all()
     permission_classes_by_action = { 
         'create': [IsAuthenticated], 
-        'list': [AllowAny]
+        'list': [AllowAny],
+        'create': [IsAuthenticated], 
+
     }
 
     serializers = {
@@ -46,3 +48,4 @@ class CommentViewsets(ModelViewSet):
         except KeyError:
             # action is not set return default permission_classes
             return [permission() for permission in self.permission_classes]
+

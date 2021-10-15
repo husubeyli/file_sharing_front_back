@@ -138,6 +138,9 @@ ASGI_APPLICATION = "file_sharing.routing.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+DATABSE_ROUTERS = ['routers.db_routers.CheckerRouter', ]
+# DATABASE_APPS_MAPPING = {'accounts': 'users_db'}
+
 
 if PROD:
     DATABASES = {
@@ -153,13 +156,17 @@ if PROD:
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join (BASE_DIR, 'users.db.sqlite3'),
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'file_sharing_db',
+            'USER': 'file_sharing_user',
+            'PASSWORD': 'f26b8ab553cfd4767216dbc7be7702fcad1b0115a6347e87e',
+            'HOST': 'localhost',
+            'PORT': '5438'
         },
-        'users_db': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join (BASE_DIR, 'users.db.sqlite3'),
-        }
+        # 'users_db': {
+        #     'ENGINE': 'django.db.backends.sqlite3',
+        #     'NAME': os.path.join (BASE_DIR, 'users.db.sqlite3'),
+        # },
     }
 
 
@@ -261,5 +268,3 @@ else:
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-DATABSE_ROUTERS = ['routers.db_routers.AuthRouter', ]
