@@ -28,7 +28,7 @@ class CommentConsumer(AsyncConsumer):
         new_comment = json.loads(new_comment_data)
         user_id = new_comment['author']
         user = User.objects.get(id=int(user_id))
-        print('makaka',user)
+        print('makaka', user)
         comment_text = new_comment['comment_text']
         file_id = new_comment['file_id']
         message = await self.create_comment(user_id, comment_text, file_id)
@@ -57,7 +57,7 @@ class CommentConsumer(AsyncConsumer):
         file = File.objects.get(id=file_id)
         message = Comment(
             users=author,
-            content = comment_text,
+            content=comment_text,
             files=file,
         )
         message.save()

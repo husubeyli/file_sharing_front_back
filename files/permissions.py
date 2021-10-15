@@ -11,3 +11,18 @@ class IsUserShowAndWrite(BasePermission):
         else:
             return False
 
+
+class CanDelete(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if obj.user == request.user or obj.files.user == request.user:
+            return True
+        else:
+            return False
+
+
+class CanEdit(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if obj.user == request.user:
+            return True
+        else:
+            return False

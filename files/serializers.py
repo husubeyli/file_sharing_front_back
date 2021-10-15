@@ -28,7 +28,6 @@ class FileCreateSerializer(serializers.ModelSerializer):
 class FileAcessSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(source='user.username')
 
-
     class Meta:
         model = File
         fields = [
@@ -44,6 +43,7 @@ class FileAcessSerializer(serializers.ModelSerializer):
 class AcessTypeSerializer(serializers.ModelSerializer):
     access_type = serializers.SerializerMethodField()
     files = FileAcessSerializer(many=True)
+
     class Meta:
         model = AccessUser
         fields = [
