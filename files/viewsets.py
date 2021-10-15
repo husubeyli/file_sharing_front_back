@@ -41,15 +41,17 @@ class CommentViewsets(ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        if self.request.user == instance.users:
-            return super().perform_destroy(instance)
+        if self.request.user == instance.users or self.request.user == instance.files.user:
+            super().perform_destroy(instance)
+            return Response({ 'message': 'successfuly deleted', 'status': status.HTTP_204_NO_CONTENT })
         return Response({'error_message': 'You do not have permission to delete.'}, status=status.HTTP_403_FORBIDDEN)
 
 
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
         if request.user == instance.users:
-            return super().partial_update(request, *args, **kwargs)
+            super().partial_update(request, *args, **kwargs)
+            return Response({ 'message': 'successfuly updated', 'status': status.HTTP_200_OK })
         return Response({ 'message': 'User not access for comment', 'status': status.HTTP_403_FORBIDDEN })
 
 
