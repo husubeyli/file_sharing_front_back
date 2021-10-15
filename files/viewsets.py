@@ -1,3 +1,4 @@
+from django.http.response import HttpResponse
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
@@ -35,9 +36,22 @@ class CommentViewsets(ModelViewSet):
         return Response({ 'message': 'User not access for comment', 'status': status.HTTP_403_FORBIDDEN })
 
     def list(self, request):
-        print(request.data, 'makaka')
         results = CommentSerializer(Comment.objects.all(), many=True)
         return Response(results.data)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if self.request.user == instance.users:
+            return super().perform_destroy(instance)
+        return Response({'error_message': 'You do not have permission to delete.'}, status=status.HTTP_403_FORBIDDEN)
+
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if request.user == instance.users:
+            return super().partial_update(request, *args, **kwargs)
+        return Response({ 'message': 'User not access for comment', 'status': status.HTTP_403_FORBIDDEN })
+
 
     def get_permissions(self):
         try:
