@@ -64,3 +64,4 @@ class CommentViewsets(ModelViewSet):
         except KeyError:
             # action is not set return default permission_classes
             return [permission() for permission in self.permission_classes]
+

@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
     postgres:   
-        image: postgres
+        image: postgres 
         ports:
             - 5438:5432
         env_file: ../.env
@@ -15,8 +15,8 @@ services:
             - '127.0.0.1:6379:6379'
         restart: always
         
-    adminer:
-        image: adminer
-        restart: always
-        ports:
-            - 8080:8080
+    # adminer:
+    #     image: adminer
+    #     restart: always
+    #     ports:
+    #         - 8080:8080

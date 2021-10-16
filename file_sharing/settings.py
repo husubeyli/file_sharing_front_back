@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     # extensions
     "corsheaders",
     'drf_yasg',
+    'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'rest_framework',
     'channels',
@@ -138,6 +139,13 @@ ASGI_APPLICATION = "file_sharing.routing.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+DATABSE_ROUTERS = ['routers.db_routers.AuthRouter', ]
+DATABASE_APPS_MAPPING = {
+    'accounts':'default',
+    'accounts':'users_db'
+}
+
+
 
 if PROD:
     DATABASES = {
@@ -154,7 +162,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join (BASE_DIR, 'users.db.sqlite3'),
+            'NAME': os.path.join (BASE_DIR, 'db.sqlite3'),
         },
         'users_db': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -170,6 +178,7 @@ else:
 # }
 
 if DEBUG:
+    
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels.layers.InMemoryChannelLayer"
@@ -259,4 +268,3 @@ else:
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DATABSE_ROUTERS = ['routers.db_routers.AuthRouter', ]
