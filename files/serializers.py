@@ -3,7 +3,6 @@ from rest_framework import serializers
 from .models import AccessUser, File, Comment
 from accounts.serializers import UserSerializer
 
-
 class FileCreateSerializer(serializers.ModelSerializer):
 
     class Meta:

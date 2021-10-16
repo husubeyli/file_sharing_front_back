@@ -1,20 +1,37 @@
+import json
 from django.contrib.auth import get_user_model
+
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.validators import UniqueValidator
+from .models import UserInfo
 
 
 User = get_user_model()
+
+
 
 
 class UserLoginSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
         data = super().validate(attrs)
+        context = {}
         user_data = UserSerializer(self.user).data
         data.update(**user_data)
+        user = self.user
+        # user_info, created = UserInfo.objects.get_or_create(browser_family='ISO', user_id=user.id, username=user.username)
+        try:
+            user_info = UserInfo.objects.using('users_db').get(browser_family='ISO', user_id=user.id, username=user.username)
+        except UserInfo.DoesNotExist:
+            user_info = UserInfo.objects.using('users_db').create(browser_family='ISO', user_id=user.id, username=user.username)
+        context['data'] = data
+        context['user'] = user
+        
         return data
+
+    
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -1,23 +1,32 @@
-class CheckerRouter:
+from django.conf import settings
+
+# Routing table defined in setting
+from django.contrib import admin
+
+server_site = admin.AdminSite('default')
+local_site = admin.AdminSite('users_db')
+
+
+class AuthRouter(object):
+    router_app_labels = {'accounts'}
+
     def db_for_read(self, model, **hints):
-        if model._meta.app_label == 'accounts':
+        if model._meta.app_label == "accounts":
             return 'users_db'
-        return 'default'
+        return None
 
     def db_for_write(self, model, **hints):
-        if model._meta.app_label == 'accounts':
+        if model._meta.app_label == "accounts":
             return 'users_db'
-        return 'default'
+        return None
 
     def allow_realtion(self, obj1, obj2, **hint):
-        if(obj1._meta.app_label =='accounts' or obj2._meta.app_label == 'accounts'):
+        if(obj1._meta.app_label  == "accounts" or obj2._meta.app_label  == "accounts"):
             return True
-        elif 'accounts' not in [obj1._meta.app_label, obj2._meta.app_label]:
-            return True
-        return False
+        return None
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
-        if app_label == 'accounts':
+        if app_label  == "accounts":
             return db == 'users_db'
         return None
 
