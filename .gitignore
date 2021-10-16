@@ -128,6 +128,8 @@ venv.bak/
 
 # database
 pgdb/
+db.sqlite3
+users.db.sqlite3
 
 # Spyder project settings
 .spyderproject
