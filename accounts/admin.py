@@ -27,6 +27,8 @@ class MultiDBListFilter(admin.SimpleListFilter):
 
 class UserInfoAdmin(admin.ModelAdmin):
     using = 'users_db'
+    list_display = ('username','user_id',)
+    list_display_links = ('username',)
 
     class Meta:
         unique_together = ('user_id', 'user_name')

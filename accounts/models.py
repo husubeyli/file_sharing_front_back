@@ -20,6 +20,10 @@ class UserInfo(models.Model):
     os_version = models.CharField(max_length=50, blank=True, null=True)
     ip_adress = models.CharField(max_length=255, blank=True, null=True)
 
+    # moderations
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     class Meta:
         # app_label = 'accounts'
         # managed = False
